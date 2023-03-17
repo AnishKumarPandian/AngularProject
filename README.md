@@ -1,0 +1,2 @@
+# AngularProject
+.NET CORE EF ANGULAR FROM STRACH
