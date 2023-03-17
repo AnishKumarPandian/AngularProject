@@ -1,0 +1,27 @@
+{
+    "sqltools.connections": [
+        {
+            "pgOptions": {
+                "ssl": true
+            },
+            "previewLimit": 50,
+            "server": "anishdbserver.postgres.database.azure.com",
+            "driver": "PostgreSQL",
+            "name": "anishdbserver",
+            "connectString": "postgres://adminanish:Anish@1102@anishdbserver.postgres.database.azure.com:5432/postgres",
+            "database": "postgres",
+            "username": "adminanish",
+            "password": "Anish@1102"
+        },
+        {
+            "previewLimit": 50,
+            "server": "10.87.1.126",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "LocalDB",
+            "database": "postgres",
+            "username": "lama_dev",
+            "password": "L@MaDevw!ndows!@#2022"
+        }
+    ]
+}
