@@ -2,6 +2,7 @@ using infrastructure.Data;
 using core.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using core.Interfaces;
 
 namespace BABYAPI.Controllers;
 
@@ -9,21 +10,18 @@ namespace BABYAPI.Controllers;
 [Route("api/[controller]")]
 public class ProductsController : ControllerBase
 {
-    private readonly StoreContext _context;
-    public ProductsController(StoreContext context)
-    {
-        _context = context;
-    }
-    [HttpGet("GetProducts")]
-    public ActionResult<List<Product>> GetProducts()
-    {
-        return Ok(_context.Products.ToList());
-    }
+    private readonly IProductRepository _repo;
 
-    [HttpGet("GetAsyncProducts")]
-    public async Task<ActionResult<List<Product>>> GetAsyncProducts()
+    public ProductsController(IProductRepository repo)
     {
-        var product = await _context.Products.ToListAsync();
+        _repo = repo;
+    }
+   
+
+    [HttpGet("GetProducts")]
+    public async Task<ActionResult<List<Product>>> GetProducts()
+    {
+        var product = await _repo.GetProductsAsync();
         return Ok(product);
     }
 
@@ -31,6 +29,20 @@ public class ProductsController : ControllerBase
     public async Task<ActionResult<List<Product>>> GetProduct(int id)
     {
 
-        return Ok(await _context.Products.FindAsync(id));
+        return Ok(await _repo.GetProductByIdAsync(id));
+    }
+
+    [HttpGet("GetProductBrands")]
+    public async Task<ActionResult<List<Product>>> GetProductBrands()
+    {
+        var productbrands = await _repo.GetProductBrandsAsync();
+        return Ok(productbrands);
+    }
+
+    [HttpGet("GetProductTypes")]
+    public async Task<ActionResult<List<Product>>> GetProductTypes()
+    {
+        var producttypes = await _repo.GetProductTypesAsync();
+        return Ok(producttypes);
     }
 }
