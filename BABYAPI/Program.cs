@@ -20,7 +20,8 @@ internal class Program
        // var connectionString = Configuration["PostgreSql:ConnectionString"];
         builder.Services.AddDbContext<StoreContext>(x => x.UseNpgsql(builder.Configuration.GetConnectionString("LoginConnection")));
 
-        IServiceCollection serviceCollection = builder.Services.AddScoped<IProductRepository, ProductRespository>();
+        //IServiceCollection serviceCollection = builder.Services.AddScoped<IProductRepository, ProductRespository>();
+        IServiceCollection serviceCollection = builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
         var app = builder.Build();
 
         using(var scope = app.Services.CreateScope()){

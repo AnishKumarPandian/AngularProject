@@ -3,6 +3,7 @@ using core.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using core.Interfaces;
+using core.Specifications;
 
 namespace BABYAPI.Controllers;
 
@@ -10,39 +11,46 @@ namespace BABYAPI.Controllers;
 [Route("api/[controller]")]
 public class ProductsController : ControllerBase
 {
-    private readonly IProductRepository _repo;
+    private readonly IGenericRepository<Product> _productrepo;
+    private readonly IGenericRepository<ProductBrand> _productbrandrepo;
+    private readonly IGenericRepository<ProductType> _producttyperepo;
 
-    public ProductsController(IProductRepository repo)
+    public ProductsController(IGenericRepository<Product> productrepo,
+                              IGenericRepository<ProductBrand> productbrandrepo,
+                              IGenericRepository<ProductType> producttyperepo)
     {
-        _repo = repo;
+        _productrepo = productrepo;
+        _productbrandrepo = productbrandrepo;
+        _producttyperepo = producttyperepo;
     }
    
 
     [HttpGet("GetProducts")]
     public async Task<ActionResult<List<Product>>> GetProducts()
     {
-        var product = await _repo.GetProductsAsync();
+        var spec = new ProductsWithTypesAndBrandsSpecification();
+        var product = await _productrepo.ListAllAsync(spec);
         return Ok(product);
     }
 
     [HttpGet("GetProduct")]
     public async Task<ActionResult<List<Product>>> GetProduct(int id)
     {
-
-        return Ok(await _repo.GetProductByIdAsync(id));
+        var spec = new ProductsWithTypesAndBrandsSpecification(id);
+        return Ok(await _productrepo.GetEntityWithSpec(spec));
     }
 
     [HttpGet("GetProductBrands")]
     public async Task<ActionResult<List<Product>>> GetProductBrands()
     {
-        var productbrands = await _repo.GetProductBrandsAsync();
+        var productbrands = await _productbrandrepo.ListAllAsync();
         return Ok(productbrands);
     }
 
     [HttpGet("GetProductTypes")]
     public async Task<ActionResult<List<Product>>> GetProductTypes()
     {
-        var producttypes = await _repo.GetProductTypesAsync();
+        var producttypes = await _producttyperepo.ListAllAsync();
         return Ok(producttypes);
     }
 }
